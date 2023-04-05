@@ -18,10 +18,10 @@ function setMap() {
 
     //create Albers equal area conic projection centered on California
     var projection = d3.geoAlbers()
-        .center([14.91, 38.59])
-        .rotate([134.91, 0, 0])
-        .parallels([18.68, 38.61])
-        .scale(1489.90)
+        .center([-47.27, 46.33])
+        .rotate([81, 10.91, 0])
+        .parallels([32.45, 40.58])
+        .scale(2018.19)
         .translate([width / 2, height / 2]);
 
     //path to convert projection
@@ -42,8 +42,8 @@ function setMap() {
             usa = data[2];
         
         //translate states TopoJSON
-        var states = topojson.feature(usa, usa.objects.ne_110m_admin_1_states_provinces),
-            ca_counties = topojson.feature(california, california.objects.CA_Counties_TIGER2016);
+        var ca_counties = topojson.feature(california, california.objects.CA_Counties_TIGER2016),
+        states = topojson.feature(usa, usa.objects.ne_110m_admin_1_states_provinces);
 
         //add all states to map
         var lower48 = map.append("path")
