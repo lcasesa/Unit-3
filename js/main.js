@@ -18,10 +18,10 @@ function setMap() {
 
     //create Albers equal area conic projection centered on California
     var projection = d3.geoAlbers()
-        .center([-47.27, 46.33])
-        .rotate([81, 10.91, 0])
-        .parallels([32.45, 40.58])
-        .scale(2018.19)
+        .center([-38.18, 39.05])
+        .rotate([81.00, 0.91, 0])
+        .parallels([9.73, 36.31])
+        .scale(2270.71)
         .translate([width / 2, height / 2]);
 
     //path to convert projection
@@ -44,6 +44,18 @@ function setMap() {
         //translate states TopoJSON
         var ca_counties = topojson.feature(california, california.objects.CA_Counties_TIGER2016),
         states = topojson.feature(usa, usa.objects.ne_110m_admin_1_states_provinces);
+
+        //create graticule generator
+        var graticule = d3.geoGraticule()
+            .step([5, 5]); //place graticule lines every 5 degrees of longitude and latitude
+
+        //create graticule lines
+        var gratLines = map.selectAll(".gratLines") //select graticule elements that will be created
+            .data(graticule.lines()) //bind graticule lines to each element to be created
+            .enter() //create an element for each datum
+            .append("path") //append each element to the svg as a path element
+            .attr("class", "gratLines") //assign class for styling
+            .attr("d", path); //project graticule lines
 
         //add all states to map
         var lower48 = map.append("path")
