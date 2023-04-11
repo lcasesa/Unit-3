@@ -24,9 +24,7 @@
     stroke-width: 2px;
 }
 
-.gratLines {
-    fill: none;
-    stroke: #999;
-    stroke-width: 1px;
+.map {
+    border: medium solid #999;
 }
 

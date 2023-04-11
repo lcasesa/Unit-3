@@ -18,10 +18,10 @@ function setMap() {
 
     //create Albers equal area conic projection centered on California
     var projection = d3.geoAlbers()
-        .center([-38.18, 39.05])
-        .rotate([81.00, 0.91, 0])
-        .parallels([9.73, 36.31])
-        .scale(2270.71)
+        .center([-36.36, 39.96])
+        .rotate([82.82, 1.82, 0])
+        .parallels([14.27, 36.31])
+        .scale(2346.47)
         .translate([width / 2, height / 2]);
 
     //path to convert projection
@@ -30,7 +30,7 @@ function setMap() {
     //use Promise.all to parallelize asynchronous data loading
     var promises = [
         d3.csv("data/diabetes_data.csv"),
-        d3.json("data/ca_counties.topojson"),
+        d3.json("data/ca_counties_v2.topojson"),
         d3.json("data/states.topojson")
     ];
     Promise.all(promises).then(callback);
@@ -42,21 +42,10 @@ function setMap() {
             usa = data[2];
         
         //translate states TopoJSON
-        var ca_counties = topojson.feature(california, california.objects.CA_Counties_TIGER2016),
+        var ca_counties = topojson.feature(california, california.objects.ca_counties).features,
         states = topojson.feature(usa, usa.objects.ne_110m_admin_1_states_provinces);
 
-        //create graticule generator
-        var graticule = d3.geoGraticule()
-            .step([5, 5]); //place graticule lines every 5 degrees of longitude and latitude
-
-        //create graticule lines
-        var gratLines = map.selectAll(".gratLines") //select graticule elements that will be created
-            .data(graticule.lines()) //bind graticule lines to each element to be created
-            .enter() //create an element for each datum
-            .append("path") //append each element to the svg as a path element
-            .attr("class", "gratLines") //assign class for styling
-            .attr("d", path); //project graticule lines
-
+        
         //add all states to map
         var lower48 = map.append("path")
             .datum(states)
