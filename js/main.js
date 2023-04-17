@@ -2,7 +2,8 @@
 (function () {
 
     //pseudo-global variables
-    var attrArray = ["varA", "varB", "varC", "varD", "varE"]; //list of attributes
+    var attrArray = ["per_2011", "per_2012", "per_2013", "per_2014", "per_2015", "per_2016",
+    "per_2017", "per_2018", "per_2019", "per_2020"]; //list of attributes
     var expressed = attrArray[0]; //initial attribute
 
 
@@ -59,21 +60,13 @@
                 .attr("class", "states")
                 .attr("d", path);
 
-            //add california counties to map
-            var counties = map.selectAll(".regions")
-                .data(ca_counties)
-                .enter()
-                .append("path")
-                .attr("class", function (d) {
-                    return "regions " + d.properties.adm1_code;
-                })
-                .attr("d", path);
+
 
             ca_counties = joinData(ca_counties, csvData);
 
             var colorScale = makeColorScale(csvData);
 
-            setEnumerationUnits(ca_counties,map,path,colorScale)
+            setEnumerationUnits(ca_counties, map, path, colorScale)
 
         };
     };
@@ -138,29 +131,29 @@
         colorScale.domain(domainArray);
 
         return colorScale;
-    }
+    };
 
 
-    function setEnumerationUnits(ca_counties,map,path,colorScale){
-        //add France regions to map
+    function setEnumerationUnits(ca_counties, map, path, colorScale) {
+        //add california counties to map
         var counties = map.selectAll(".regions")
             .data(ca_counties)
             .enter()
             .append("path")
-            .attr("class", function(d){
+            .attr("class", function (d) {
                 return "regions " + d.properties.adm1_code;
             })
             .attr("d", path)
-            .style("fill", function(d){
+            .style("fill", function (d) {
                 var value = d.properties[expressed];
-                if(value) {
+                if (value) {
                     return colorScale(d.properties[expressed]);
                 } else {
                     return "#ccc";
                 }
-        });
+            });
     }
-    
+
 })();
 
 
