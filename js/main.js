@@ -69,8 +69,14 @@
                 })
                 .attr("d", path);
 
-        }
-    }
+            ca_counties = joinData(ca_counties, csvData);
+
+            var colorScale = makeColorScale(csvData);
+
+            setEnumerationUnits(ca_counties,map,path,colorScale)
+
+        };
+    };
 
     function joinData(ca_counties, csvData) {
         //loop through csv to assign each set of csv attribute values to geojson region
@@ -80,6 +86,7 @@
 
             //loop through geojson regions to find correct region
             for (var a = 0; a < ca_counties.length; a++) {
+
                 var geojsonProps = ca_counties[a].properties; //the current region geojson properties
                 var geojsonKey = geojsonProps.adm1_code; //the geojson primary key
 
@@ -134,15 +141,26 @@
     }
 
 
-    function setEnumerationUnits(ca_counties, map, path) {
+    function setEnumerationUnits(ca_counties,map,path,colorScale){
         //add France regions to map
-        var regions = map.selectAll(".regions")
+        var counties = map.selectAll(".regions")
             .data(ca_counties)
             .enter()
             .append("path")
-            .attr("class", function (d) {
+            .attr("class", function(d){
                 return "regions " + d.properties.adm1_code;
             })
-            .attr("d", path);
+            .attr("d", path)
+            .style("fill", function(d){
+                var value = d.properties[expressed];
+                if(value) {
+                    return colorScale(d.properties[expressed]);
+                } else {
+                    return "#ccc";
+                }
+        });
     }
+    
 })();
+
+
