@@ -3,7 +3,7 @@
 
     //pseudo-global variables
     var attrArray = ["per_2011", "per_2012", "per_2013", "per_2014", "per_2015", "per_2016",
-    "per_2017", "per_2018", "per_2019", "per_2020"]; //list of attributes
+        "per_2017", "per_2018", "per_2019", "per_2020"]; //list of attributes
     var expressed = attrArray[0]; //initial attribute
 
 
@@ -14,7 +14,7 @@
     function setMap() {
 
         //map frame dimensions
-        var width = 860,
+        var width = window.innerWidth * 0.5,
             height = 860;
 
         //create new svg container for the map
@@ -67,6 +67,9 @@
             var colorScale = makeColorScale(csvData);
 
             setEnumerationUnits(ca_counties, map, path, colorScale)
+
+            //add coordinated visualization to the map
+            setChart(csvData, colorScale);
 
         };
     };
@@ -128,7 +131,7 @@
         domainArray.shift();
         //assign array of last 4 cluster minimums as domain
         colorScale.domain(domainArray);
-        
+
         return colorScale;
     };
 
@@ -146,13 +149,86 @@
             .style("fill", function (d) {
                 var value = d.properties[expressed];
                 if (value) {
-                    console.log(d.properties)
                     return colorScale(d.properties[expressed]);
                 } else {
                     return "#ccc";
                 }
             });
     }
+
+    //function to create coordinated bar chart
+    function setChart(csvData, colorScale) {
+        //chart frame dimensions
+        var chartWidth = window.innerWidth * 0.425,
+            chartHeight = 460;
+
+        //create a second svg element to hold the bar chart
+        var chart = d3.select("body")
+            .append("svg")
+            .attr("width", chartWidth)
+            .attr("height", chartHeight)
+            .attr("class", "chart");
+
+        //create a scale to size bars proportionally to frame
+        var yScale = d3.scaleLinear()
+            .range([0, chartHeight])
+            .domain([0, 105]);
+
+        //set bars for each province
+        var bars = chart.selectAll(".bars")
+            .data(csvData)
+            .enter()
+            .append("rect")
+            .sort(function (a, b) {
+                return a[expressed] - b[expressed]
+            })
+            .attr("class", function (d) {
+                return "bars " + d.adm1_code;
+            })
+            .attr("width", chartWidth / csvData.length - 1)
+            .attr("x", function (d, i) {
+                return i * (chartWidth / csvData.length);
+            })
+            .attr("height", function (d) {
+                return yScale(parseFloat(d[expressed]));
+            })
+            .attr("y", function (d) {
+                return chartHeight - yScale(parseFloat(d[expressed]));
+            }).style("fill", function (d) {
+                return colorScale(d[expressed]);
+            });
+
+        //annotate bars with attribute value text
+        var numbers = chart.selectAll(".numbers")
+            .data(csvData)
+            .enter()
+            .append("text")
+            .sort(function (a, b) {
+                return a[expressed] - b[expressed]
+            })
+            .attr("class", function (d) {
+                return "numbers " + d.adm1_code;
+            })
+            .attr("text-anchor", "middle")
+            .attr("x", function (d, i) {
+                var fraction = chartWidth / csvData.length;
+                return i * fraction + (fraction - 1) / 2;
+            })
+            .attr("y", function (d) {
+                return chartHeight - yScale(parseFloat(d[expressed])) + 15;
+            })
+            .text(function (d) {
+                return d[expressed];
+            });
+
+        //below Example 2.8...create a text element for the chart title
+        var chartTitle = chart.append("text")
+            .attr("x", 20)
+            .attr("y", 40)
+            .attr("class", "chartTitle")
+            .text("Percentage of adults aged 20+ with diabetes " + expressed[3] + " per county");
+
+    };
 
 })();
 
