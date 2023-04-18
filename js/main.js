@@ -71,6 +71,9 @@
             //add coordinated visualization to the map
             setChart(csvData, colorScale);
 
+            //add dropdown
+            createDropdown();
+
         };
     };
 
@@ -235,7 +238,60 @@
             .attr("width", chartInnerWidth)
             .attr("height", chartInnerHeight)
             .attr("transform", translate);
+
     };
+
+    //function to create a dropdown menu for attribute selection
+    //function to create a dropdown menu for attribute selection
+    function createDropdown(csvData) {
+        //add select element
+        var dropdown = d3
+            .select("body")
+            .append("select")
+            .attr("class", "dropdown")
+            .on("change", function () {
+                changeAttribute(this.value, csvData);
+            });
+
+        //add initial option
+        var titleOption = dropdown
+            .append("option")
+            .attr("class", "titleOption")
+            .attr("disabled", "true")
+            .text("Select Attribute");
+
+        //add attribute name options
+        var attrOptions = dropdown
+            .selectAll("attrOptions")
+            .data(attrArray)
+            .enter()
+            .append("option")
+            .attr("value", function (d) {
+                return d;
+            })
+            .text(function (d) {
+                return d;
+            });
+    }
+
+    //dropdown change listener handler
+    function changeAttribute(attribute, csvData) {
+        //change the expressed attribute
+        expressed = attribute;
+
+        //recreate the color scale
+        var colorScale = makeColorScale(csvData);
+
+        //recolor enumeration units
+        var regions = d3.selectAll(".regions").style("fill", function (d) {
+            var value = d.properties[expressed];
+            if (value) {
+                return colorScale(d.properties[expressed]);
+            } else {
+                return "#ccc";
+            }
+        });
+    }
 
 })();
 
