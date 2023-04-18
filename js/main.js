@@ -14,8 +14,8 @@
     function setMap() {
 
         //map frame dimensions
-        var width = 1200,
-            height = 960;
+        var width = 860,
+            height = 860;
 
         //create new svg container for the map
         var map = d3
@@ -27,10 +27,10 @@
 
         //create Albers equal area conic projection centered on California
         var projection = d3.geoAlbers()
-            .center([-36.36, 39.96])
-            .rotate([82.82, 1.82, 0])
-            .parallels([14.27, 36.31])
-            .scale(2346.47)
+            .center([-36.36, 38.60])
+            .rotate([84.64, 1.82, 0])
+            .parallels([14.73, 46.48])
+            .scale(3926.26)
             .translate([width / 2, height / 2]);
 
         //path to convert projection
@@ -75,13 +75,13 @@
         //loop through csv to assign each set of csv attribute values to geojson region
         for (var i = 0; i < csvData.length; i++) {
             var csvRegion = csvData[i]; //the current region
-            var csvKey = csvRegion.adm1_code; //the CSV primary key
+            var csvKey = csvRegion.county; //the CSV primary key
 
             //loop through geojson regions to find correct region
             for (var a = 0; a < ca_counties.length; a++) {
 
                 var geojsonProps = ca_counties[a].properties; //the current region geojson properties
-                var geojsonKey = geojsonProps.adm1_code; //the geojson primary key
+                var geojsonKey = geojsonProps.NAME; //the geojson primary key
 
                 //where primary keys match, transfer csv data to geojson properties object
                 if (geojsonKey == csvKey) {
@@ -126,10 +126,9 @@
         });
         //remove first value from domain array to create class breakpoints
         domainArray.shift();
-
         //assign array of last 4 cluster minimums as domain
         colorScale.domain(domainArray);
-
+        
         return colorScale;
     };
 
@@ -147,6 +146,7 @@
             .style("fill", function (d) {
                 var value = d.properties[expressed];
                 if (value) {
+                    console.log(d.properties)
                     return colorScale(d.properties[expressed]);
                 } else {
                     return "#ccc";

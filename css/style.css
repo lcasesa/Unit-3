@@ -28,3 +28,9 @@
     border: medium solid #999;
 }
 
+.regions {
+    stroke: #000;
+    stroke-width: 0.7px;
+    stroke-linecap: round;
+}
+
