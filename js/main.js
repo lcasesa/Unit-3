@@ -72,7 +72,7 @@
             setChart(csvData, colorScale);
 
             //add dropdown
-            createDropdown();
+            createDropdown(csvData);
 
         };
     };
@@ -112,18 +112,15 @@
             "#DE2D26",
             "#A50F15"
         ];
-
         //create color scale generator
         var colorScale = d3.scaleThreshold()
             .range(colorClasses);
-
         //build array of all values of the expressed attribute
         var domainArray = [];
         for (var i = 0; i < data.length; i++) {
             var val = parseFloat(data[i][expressed]);
             domainArray.push(val);
         };
-
         //cluster data using ckmeans clustering algorithm to create natural breaks
         var clusters = ss.ckmeans(domainArray, 5);
         //reset domain array to cluster minimums
@@ -178,12 +175,7 @@
             .attr("height", chartHeight)
             .attr("class", "chart");
 
-        //create a rectangle for chart background fill
-        var chartBackground = chart.append("rect")
-            .attr("class", "chartBackground")
-            .attr("width", chartInnerWidth)
-            .attr("height", chartInnerHeight)
-            .attr("transform", translate);
+        
 
         //create a scale to size bars proportionally to frame and for axis
         var yScale = d3.scaleLinear()
