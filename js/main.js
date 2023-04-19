@@ -191,19 +191,7 @@
             .attr("class", function (d) {
                 return "bar " + d.adm1_code;
             })
-            .attr("width", chartInnerWidth / csvData.length - 1)
-            .attr("x", function (d, i) {
-                return i * (chartInnerWidth / csvData.length) + leftPadding;
-            })
-            .attr("height", function (d, i) {
-                return 463 - yScale(parseFloat(d[expressed]));
-            })
-            .attr("y", function (d, i) {
-                return yScale(parseFloat(d[expressed])) + topBottomPadding;
-            })
-            .style("fill", function (d) {
-                return colorScale(d[expressed]);
-            });
+            .attr("width", chartInnerWidth / csvData.length - 1);
 
         //create a text element for the chart title
         var chartTitle = chart.append("text")
@@ -229,9 +217,11 @@
             .attr("height", chartInnerHeight)
             .attr("transform", translate);
 
+        //set bar positions, heights, and colors
+        updateChart(bars, csvData.length, colorScale);
     };
 
-    //function to create a dropdown menu for attribute selection
+
     //function to create a dropdown menu for attribute selection
     function createDropdown(csvData) {
         //add select element
@@ -281,24 +271,32 @@
                 return "#ccc";
             }
         });
+
         //re-sort, resize, and recolor bars
         var bars = d3
             .selectAll(".bar")
             //re-sort bars
             .sort(function (a, b) {
                 return b[expressed] - a[expressed];
-            })
-            .attr("x", function (d, i) {
-                return i * (chartInnerWidth / csvData.length) + leftPadding;
-            })
-            //resize bars
+            });
+
+        updateChart(bars, csvData.length, colorScale);
+    }
+
+    //function to position, size, and color bars in chart
+    function updateChart(bars, n, colorScale) {
+        //position bars
+        bars.attr("x", function (d, i) {
+            return i * (chartInnerWidth / n) + leftPadding;
+        })
+            //size/resize bars
             .attr("height", function (d, i) {
                 return 463 - yScale(parseFloat(d[expressed]));
             })
             .attr("y", function (d, i) {
                 return yScale(parseFloat(d[expressed])) + topBottomPadding;
             })
-            //recolor bars
+            //color/recolor bars
             .style("fill", function (d) {
                 var value = d[expressed];
                 if (value) {
@@ -307,8 +305,13 @@
                     return "#ccc";
                 }
             });
-    }
 
+
+        //at the bottom of updateChart()...add text to chart title
+        var chartTitle = d3
+            .select(".chartTitle")
+            .text("Number of Variable " + expressed[3] + " in each region");
+    };
 })();
 
 
