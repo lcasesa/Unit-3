@@ -6,6 +6,21 @@
         "per_2017", "per_2018", "per_2019", "per_2020"]; //list of attributes
     var expressed = attrArray[0]; //initial attribute
 
+    //chart frame dimensions
+    var chartWidth = window.innerWidth * 0.425,
+        chartHeight = 473,
+        leftPadding = 25,
+        rightPadding = 2,
+        topBottomPadding = 5,
+        chartInnerWidth = chartWidth - leftPadding - rightPadding,
+        chartInnerHeight = chartHeight - topBottomPadding * 2,
+        translate = "translate(" + leftPadding + "," + topBottomPadding + ")";
+
+    //create a scale to size bars proportionally to frame and for axis
+    var yScale = d3.scaleLinear()
+        .range([463, 0])
+        .domain([0, 110]);
+
 
     //begin script when window loads
     window.onload = setMap();
@@ -158,29 +173,12 @@
 
     //function to create coordinated bar chart
     function setChart(csvData, colorScale) {
-        //chart frame dimensions
-        var chartWidth = window.innerWidth * 0.425,
-            chartHeight = 473,
-            leftPadding = 25,
-            rightPadding = 2,
-            topBottomPadding = 5,
-            chartInnerWidth = chartWidth - leftPadding - rightPadding,
-            chartInnerHeight = chartHeight - topBottomPadding * 2,
-            translate = "translate(" + leftPadding + "," + topBottomPadding + ")";
-
         //create a second svg element to hold the bar chart
         var chart = d3.select("body")
             .append("svg")
             .attr("width", chartWidth)
             .attr("height", chartHeight)
             .attr("class", "chart");
-
-        
-
-        //create a scale to size bars proportionally to frame and for axis
-        var yScale = d3.scaleLinear()
-            .range([463, 0])
-            .domain([0, 100]);
 
         //set bars for each province
         var bars = chart.selectAll(".bar")
@@ -283,6 +281,32 @@
                 return "#ccc";
             }
         });
+        //re-sort, resize, and recolor bars
+        var bars = d3
+            .selectAll(".bar")
+            //re-sort bars
+            .sort(function (a, b) {
+                return b[expressed] - a[expressed];
+            })
+            .attr("x", function (d, i) {
+                return i * (chartInnerWidth / csvData.length) + leftPadding;
+            })
+            //resize bars
+            .attr("height", function (d, i) {
+                return 463 - yScale(parseFloat(d[expressed]));
+            })
+            .attr("y", function (d, i) {
+                return yScale(parseFloat(d[expressed])) + topBottomPadding;
+            })
+            //recolor bars
+            .style("fill", function (d) {
+                var value = d[expressed];
+                if (value) {
+                    return colorScale(value);
+                } else {
+                    return "#ccc";
+                }
+            });
     }
 
 })();
