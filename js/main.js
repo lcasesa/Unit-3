@@ -30,7 +30,7 @@
             .center([-36.36, 38.60])
             .rotate([84.64, 1.82, 0])
             .parallels([14.73, 46.48])
-            .scale(3926.26)
+            .scale(4026.26)
             .translate([width / 2, height / 2]);
 
         //path to convert projection
@@ -106,11 +106,11 @@
     //function to create color scale generator
     function makeColorScale(data) {
         var colorClasses = [
-            "#D4B9DA",
-            "#C994C7",
-            "#DF65B0",
-            "#DD1C77",
-            "#980043"
+            "#FCBBA1",
+            "#FC9272",
+            "#FB6A4A",
+            "#DE2D26",
+            "#A50F15"
         ];
 
         //create color scale generator

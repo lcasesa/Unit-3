@@ -21,7 +21,7 @@
 .states {
     fill: #FFF;
     stroke: #CCC;
-    stroke-width: 2px;
+    stroke-width: 0.9px;
 }
 
 .map {
@@ -31,7 +31,7 @@
 
 .regions {
     stroke: #000;
-    stroke-width: 0.7px;
+    stroke-width: 0.9px;
     stroke-linecap: round;
 }
 
@@ -90,3 +90,15 @@
 option {
     font-weight: normal;
 }
+
+.banner {
+    width: 100%;
+    background-color: #FFF;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    font-family: poppins, sans-serif;
+    color: #000;
+  }
+
