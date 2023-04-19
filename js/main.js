@@ -310,7 +310,7 @@
         //at the bottom of updateChart()...add text to chart title
         var chartTitle = d3
             .select(".chartTitle")
-            .text("Number of Variable " + expressed[3] + " in each region");
+            .text("Percentage of adults aged 20+ with diabetes " + expressed[3] + " per county (CA)");
     };
 })();
 
