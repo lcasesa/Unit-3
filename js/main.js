@@ -53,8 +53,8 @@
 
         //use Promise.all to parallelize asynchronous data loading
         var promises = [
-            d3.csv("data/diabetes_data.csv"),
-            d3.json("data/ca_counties_v2.topojson"),
+            d3.csv("data/diabetes_data_copy.csv"),
+            d3.json("data/ca_counties_v2_copy.topojson"),
             d3.json("data/states.topojson")
         ];
         Promise.all(promises).then(callback);
@@ -344,8 +344,8 @@
         //change stroke
         var selected = d3
             .selectAll("." + props.NAME)
-            .style("stroke", "blue")
-            .style("stroke-width", "2");
+            .style("stroke", "#0cc7e8")
+            .style("stroke-width", "3");
         setLabel(props);
     }
 

@@ -93,7 +93,7 @@ option {
 
 .banner {
     width: 100%;
-    background-color: #FFF;
+    background-color: #ebe091;
     padding: 20px;
     text-align: center;
     font-size: 24px;
@@ -107,7 +107,7 @@ option {
     padding-left: 30px;
     padding-right: 30px;
     padding-bottom: 20px;
-    padding-top: 10px;
+    padding-top: 20px;
 }
 
 .infolabel {
@@ -118,6 +118,7 @@ option {
     background-color: #000;
     border: solid thin #fff;
     padding: 5px 10px;
+    font-family: poppins, sans-serif;
 }
 
 .infolabel h1 {
