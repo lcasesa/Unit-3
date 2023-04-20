@@ -56,7 +56,7 @@
 
 .chartTitle {
     font-family: poppins, sans-serif;
-    font-size: 0.9em;
+    font-size: 1.1em;
     font-weight: bold;
 }
 
@@ -102,3 +102,10 @@ option {
     color: #000;
   }
 
+.information{
+    font-family: poppins, sans-serif;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 20px;
+    padding-top: 10px;
+}

@@ -263,22 +263,30 @@
         var colorScale = makeColorScale(csvData);
 
         //recolor enumeration units
-        var regions = d3.selectAll(".regions").style("fill", function (d) {
-            var value = d.properties[expressed];
-            if (value) {
-                return colorScale(d.properties[expressed]);
-            } else {
-                return "#ccc";
-            }
-        });
+        var regions = d3
+            .selectAll(".regions")
+            .transition()
+            .duration(1000)
+            .style("fill", function (d) {
+                var value = d.properties[expressed];
+                if (value) {
+                    return colorScale(value);
+                } else {
+                    return "#ccc";
+                }
+            });
 
         //re-sort, resize, and recolor bars
-        var bars = d3
-            .selectAll(".bar")
-            //re-sort bars
+        var bars = d3.selectAll(".bar")
+            //Sort bars
             .sort(function (a, b) {
                 return b[expressed] - a[expressed];
-            });
+            })
+            .transition() //add animation
+            .delay(function (d, i) {
+                return i * 20
+            })
+            .duration(500);
 
         updateChart(bars, csvData.length, colorScale);
     }
