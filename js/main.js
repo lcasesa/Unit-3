@@ -168,6 +168,9 @@
                 } else {
                     return "#ccc";
                 }
+            })
+            .on("mouseover", function (event, d) {
+                highlight(d.properties);
             });
     }
 
@@ -191,7 +194,10 @@
             .attr("class", function (d) {
                 return "bar " + d.adm1_code;
             })
-            .attr("width", chartInnerWidth / csvData.length - 1);
+            .attr("width", chartInnerWidth / csvData.length - 1)
+            .on("mouseover", function (event, d) {
+                highlight(d);
+            });
 
         //create a text element for the chart title
         var chartTitle = chart.append("text")
@@ -319,6 +325,15 @@
         var chartTitle = d3
             .select(".chartTitle")
             .text("Percentage of adults aged 20+ with diabetes " + expressed[3] + " per county (CA)");
+    }
+
+    //function to highlight enumeration units and bars
+    function highlight(props) {
+        //change stroke
+        var selected = d3
+            .selectAll("." + props.adm1_code)
+            .style("stroke", "blue")
+            .style("stroke-width", "2");
     };
 })();
 
