@@ -171,7 +171,12 @@
             })
             .on("mouseover", function (event, d) {
                 highlight(d.properties);
+            })
+            .on("mouseout", function(event, d){
+                dehighlight(d.properties);
             });
+
+            var desc = counties.append("desc").text('{"stroke": "#000", "stroke-width": "0.5px"}');
     }
 
     //function to create coordinated bar chart
@@ -197,6 +202,9 @@
             .attr("width", chartInnerWidth / csvData.length - 1)
             .on("mouseover", function (event, d) {
                 highlight(d);
+            })
+            .on("mouseover", function(event, d){
+                dehighlight(d);
             });
 
         //create a text element for the chart title
@@ -222,6 +230,8 @@
             .attr("width", chartInnerWidth)
             .attr("height", chartInnerHeight)
             .attr("transform", translate);
+
+        var desc = bars.append("desc").text('{"stroke": "none", "stroke-width": "0px"}');
 
         //set bar positions, heights, and colors
         updateChart(bars, csvData.length, colorScale);
@@ -334,6 +344,26 @@
             .selectAll("." + props.adm1_code)
             .style("stroke", "blue")
             .style("stroke-width", "2");
+    }
+
+    //function to reset the element style on mouseout
+    function dehighlight(props) {
+        var selected = d3
+            .selectAll("." + props.adm1_code)
+            .style("stroke", function () {
+                return getStyle(this, "stroke");
+            })
+            .style("stroke-width", function () {
+                return getStyle(this, "stroke-width");
+            });
+
+        function getStyle(element, styleName) {
+            var styleText = d3.select(element).select("desc").text();
+
+            var styleObject = JSON.parse(styleText);
+
+            return styleObject[styleName];
+        }
     };
 })();
 
